@@ -1,12 +1,24 @@
 import {FiLogIn, FiMail, FiLock, FiUser, FiArrowLeft} from 'react-icons/fi'
 import {Link} from 'react-router-dom'
 import { Button } from '../../components/Buttom';
-
+import {useForm} from 'react-hook-form';
 import { Container} from "./styles";
 import { Content } from "./styles";
-import { Background, FormContainer, InputContainer } from "./styles";
+import { Background, FormContainer, InputContainer, Error} from "./styles";
+
+interface FormData{
+    name: string;
+    email: string;
+    password: string;
+}
 
 export function Register(){
+
+
+    const {register, handleSubmit, formState: {errors}} = useForm<FormData>();
+    const onSubmit = handleSubmit(data => alert(JSON.stringify(data)))
+
+
     return (
         <Container>
 
@@ -14,31 +26,35 @@ export function Register(){
 
                 <FormContainer>
                     <h2>Faça seu cadastro:</h2>
-                    <form action="">
+                    <form onSubmit={onSubmit}>
 
                         <InputContainer>
                             <FiMail size={40}/>
                             <input 
                                 type="text"
                                 placeholder="Nome"
+                                {...register("name",{required:true})}
                             />
                         </InputContainer>
-
+                        {errors.name && <Error>O preechimento do campo é obrigatório</Error>}
                         <InputContainer>
                             <FiMail size={40}/>
                             <input 
                                 type="email"
                                 placeholder="E-mail"
+                                {...register("email",{required:true})}
                             />
                         </InputContainer>
-
+                        {errors.email && <Error>O preechimento do campo é obrigatório</Error>}
                         <InputContainer>
                             <FiLock size={40}/>
                             <input 
                                 type="password"
                                 placeholder="Senha"
+                                {...register("password", {required:true})}
                             />
                         </InputContainer>
+                        {errors.password && <Error>O preechimento do campo é obrigatório</Error>}
                         <Button type="submit">Cadastrar</Button>
 
                     </form>

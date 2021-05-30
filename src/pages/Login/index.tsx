@@ -1,13 +1,26 @@
 
-import {FiLogIn, FiMail, FiLock} from 'react-icons/fi'
-import {Link} from 'react-router-dom'
-import { Button } from '../../components/Buttom';
-
-import { Container} from "./styles";
 import { Content } from "./styles";
-import { Background, FormContainer, InputContainer } from "./styles";
+import { Container} from "./styles";
+import {Link} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
+import { Button } from '../../components/Buttom';
+import {FiLogIn, FiMail, FiLock} from 'react-icons/fi'
+import { Background, FormContainer, InputContainer, Error} from "./styles";
+
+
+interface FormData{
+    email: string;
+    password: string;
+}
+
 
 export function Login(){
+
+
+    const {register, handleSubmit, formState: {errors}} = useForm<FormData>();
+    const onSubmit = handleSubmit(data => alert(JSON.stringify(data)))
+
+
     return (
         <Container>
 
@@ -15,22 +28,27 @@ export function Login(){
 
                 <FormContainer>
                     <h2>Faça o seu Login:</h2>
-                    <form action="">
+                    <form onSubmit={onSubmit}>
 
                         <InputContainer>
                             <FiMail size={40}/>
                             <input 
                                 type="email"
                                 placeholder="E-mail"
+                                {...register("email", {required:true})}
+
                             />
                         </InputContainer>
+                        {errors.email && <Error>O preechimento do campo é obrigatório</Error>}
                         <InputContainer>
                             <FiLock size={40}/>
                             <input 
                                 type="password"
                                 placeholder="Senha"
+                                {...register("password", {required:true})}
                             />
                         </InputContainer>
+                        {errors.password && <Error>O preechimento do campo é obrigatório</Error>}
                         <Button type="submit">Entrar</Button>
 
                     </form>
