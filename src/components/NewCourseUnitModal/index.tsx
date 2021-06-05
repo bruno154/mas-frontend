@@ -1,26 +1,26 @@
+import React from 'react';
 import Modal from 'react-modal';
-import {useForm} from 'react-hook-form'
-import { Container, Error } from './style';
-import { FiX } from 'react-icons/fi';
+import {FiX} from 'react-icons/fi';
+import { useForm } from 'react-hook-form'
+import { Container, Error } from './style'
+import api from '../../services/api';
 
 interface NewCourseUnitModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
-
 }
 
-interface NewCourseUnitData{
+interface NewCourseUnitModalData {
     name: string;
     description: string;
-
 }
 
+export function NewCourseUnitModal({isOpen, onRequestClose}:NewCourseUnitModalProps) {
 
-export function NewCourseUnitModal({isOpen, onRequestClose}:NewCourseUnitModalProps){
-
-    const {register, handleSubmit, formState: {errors}} = useForm();
-
-    const onSubmit = handleSubmit(data => alert(JSON.stringify(data)));
+    const { register, handleSubmit, formState: {errors} } = useForm<NewCourseUnitModalData>();
+    
+    const onSubmit = handleSubmit(data => api.post('/courseunit', data)
+        .then(onRequestClose));
 
     return(
         <Modal
@@ -29,7 +29,6 @@ export function NewCourseUnitModal({isOpen, onRequestClose}:NewCourseUnitModalPr
             overlayClassName="react-modal-overlay"
             className="react-modal-content"
         >
-
             <Container>
                 <h2>Cadastrar Unidade Curricular</h2>
                 <button
@@ -40,24 +39,24 @@ export function NewCourseUnitModal({isOpen, onRequestClose}:NewCourseUnitModalPr
                     <FiX size={20}/>
                 </button>
                 <form onSubmit={onSubmit}>
-                    <input type="text"
-                           placeholder="Nome"
-                           {...register("name", {required:true})}        
+                    <input 
+                        type="text"
+                        placeholder="Nome"
+                        {...register("name")}
                     />
-                    {errors.courseunit && <Error>O preechimento do campo é obrigatório</Error>}
-                    <input type="text"  
-                           placeholder="Descrição"
-                           {...register("description", {required:true})} 
+                    {errors.name && <Error>O prenchimento do campo é obrigatório</Error>}
+                    <input 
+                        type="text"
+                        placeholder="Descrição"
+                        {...register("description")}
                     />
-                    {errors.courseunit && <Error>O preechimento do campo é obrigatório</Error>}
+                    {errors.description && <Error>O prenchimento do campo é obrigatório</Error>}
+                    <button type="submit">
+                        Cadastrar
+                    </button>
                 </form>
-
             </Container>
-
-
-
-
-            
         </Modal>
+        
     )
 }

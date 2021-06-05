@@ -1,20 +1,19 @@
-//import React from 'react';          <h1>Frontend My Activies Space </h1>
-//import {Teste} from './pages/teste'
-//import logo from './logo.svg';
-//import './App.css';
-import {BrowserRouter as Router} from 'react-router-dom'
-import GlobalStyle from './styles/global';
+import { BrowserRouter as Router } from 'react-router-dom';
+import {AppProvider} from './hooks';
 import Routes from './routes';
 
+import GlobalStyle from './styles/global';
 
 function App() {
   return (
     <Router>
+      <AppProvider>
         <Routes />
-        <GlobalStyle />
+      </AppProvider>
+      <GlobalStyle />
     </Router>
   );
-
 }
 
-  export default App;
+export default App;
+
